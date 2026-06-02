@@ -74,6 +74,7 @@ export const reviewProduct = async (req, res, next) => {
     alreadyReviewed.rating = rating;
     alreadyReviewed.comment = comment;
     alreadyReviewed.name = req.user.name;
+    alreadyReviewed.createdat = Date.now();
   } else {
     //create the review
     product.reviews.push({

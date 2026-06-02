@@ -75,6 +75,7 @@ const productSchema = new mongoose.Schema(
         comment: {
           type: String,
         },
+        createdat: { type: Date, default: Date.now },
       },
     ],
 
