@@ -20,7 +20,6 @@ const ViewProduct = () => {
   );
 
   const [cartNumber, setCartNumber] = useState(1);
-  const [cartNumber, setCartNumber] = useState(1);
 
   const plus = () => {
     setCartNumber((pre) => pre + 1);
