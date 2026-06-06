@@ -3,11 +3,10 @@ import axios from "axios";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (payload, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const link = "/api/product/products";
+      const link = `/api/product/products`;
       const { data } = await axios.get(link);
-
       return data;
     } catch (error) {
       return rejectWithValue(

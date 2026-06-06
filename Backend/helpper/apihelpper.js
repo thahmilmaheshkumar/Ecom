@@ -24,7 +24,7 @@ class apihelpper {
   }
   pagination() {
     const page = Number(this.queryStr.page) || 1;
-    const limit = Number(this.queryStr.limit) || 4;
+    const limit = Number(this.queryStr.limit) || 9;
     const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
     return this;
