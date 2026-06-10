@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, removeError } from "../redux/products/productSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-hot-toast";
+import Title from "../components/Title";
 
 const Home = () => {
   const { product, productCount, loading, error } = useSelector(
@@ -17,7 +18,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProducts({ keyword: "" }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Home = () => {
     <Loader />
   ) : (
     <>
+      <Title title={"Home"} />
       <div>
         <Navebar />
         <Imageslider image={offers} />

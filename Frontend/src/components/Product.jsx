@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 
 const Product = ({ product, rating }) => {
-  console.log(product);
   return (
     <Link
       to={`/products/${product?._id}`}

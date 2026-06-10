@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -9,6 +9,13 @@ const MotionShoppingCart = motion.create(ShoppingCart);
 const Navebar = () => {
   const [cartCount, setCartCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate(`/products?k=${search}`);
+  };
 
   return (
     <motion.nav
@@ -73,17 +80,19 @@ const Navebar = () => {
           </MotionLink>
         </div>
 
-        <div className="flex items-center gap-x-0.5">
+        <form onSubmit={handleSubmit} className="flex items-center gap-x-0.5">
           <input
             type="text"
             placeholder="Search products"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
             className=" md:flex overflow-hidden px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md text-sm w-32 md:w-72 shadow-sm"
           />
           <Search
             size={18}
             className="ml-2 text-blue-500 font-semibold cursor-pointer"
           />
-        </div>
+        </form>
 
         <div className="relative">
           <MotionLink to="cart">

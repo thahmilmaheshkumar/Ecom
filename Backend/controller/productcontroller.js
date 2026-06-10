@@ -14,7 +14,7 @@ export const getAllProducts = async (req, res, next) => {
   const apiHelp = new apihelpper(products.find(), req.query).search().filter();
 
   const totalProducts = await apiHelp.query.clone().countDocuments();
-  const totalPages = Math.ceil(totalProducts / (Number(req.query.limit) || 1));
+  const totalPages = Math.ceil(totalProducts / (Number(req.query.limit) || 9));
   const page = Number(req.query.page) || 1;
 
   if (totalPages > 0 && page > totalPages) {
@@ -25,7 +25,14 @@ export const getAllProducts = async (req, res, next) => {
   const product = await apiHelp.query;
   res
     .status(200)
-    .json({ success: true, product, totalPages, page, totalProducts });
+    .json({
+      success: true,
+      product,
+      totalPages,
+      page,
+      totalProducts,
+      totalPages,
+    });
 };
 
 export const singleProduct = async (req, res, next) => {
