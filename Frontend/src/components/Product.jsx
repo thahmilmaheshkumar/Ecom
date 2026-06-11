@@ -13,6 +13,7 @@ const Product = ({ product, rating }) => {
           <img
             src={product?.images[0]?.urls}
             alt={product?.name}
+            loading="lazy"
             className="w-full h-full object-cover rounded-md mb-4 hover:scale-105 transition-transform"
           />
         </div>
