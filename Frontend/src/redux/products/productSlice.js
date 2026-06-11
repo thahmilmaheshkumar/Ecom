@@ -3,16 +3,22 @@ import axios from "axios";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async ({ keyword, page = 1 }, { rejectWithValue }) => {
+  async ({ keyword, page = 1, category }, { rejectWithValue }) => {
     try {
-      const link = keyword
-        ? `/api/product/products?k=${encodeURIComponent(keyword)}&page=${page}`
-        : `/api/product/products?page=${page}`;
+      let api = "/api/product/products?page=" + page;
+      if (category) {
+        api += `&filter=${category}`;
+      }
+      if (keyword) {
+        api += `&k=${keyword}`;
+      }
+
+      const link = api;
       const { data } = await axios.get(link);
       return data;
     } catch (error) {
       return rejectWithValue(
-        error.response.data?.message || "Something went wrong...",
+        error.response?.data?.message || "Something went wrong...",
       );
     }
   },
@@ -27,7 +33,7 @@ export const fetchProductDetails = createAsyncThunk(
       return data.product;
     } catch (error) {
       return rejectWithValue(
-        error.response.data?.message || "Something went wrong...",
+        error.response?.data?.message || "Something went wrong...",
       );
     }
   },

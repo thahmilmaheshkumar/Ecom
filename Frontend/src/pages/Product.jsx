@@ -4,28 +4,30 @@ import Footer from "../components/Footer";
 import ProductCom from "../components/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, removeError } from "../redux/products/productSlice";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Paginate from "../components/Paginate";
 import Title from "../components/Title";
 import Loader from "../components/Loader";
 
 const Product = () => {
-  const category = ["Electronics", "Stationary", "accessories"];
+  const category = ["accessories", "electronics", "stationary"];
   const { product, productCount, loading, error, totalPages } = useSelector(
     (state) => state.product,
   );
+  const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const pageurl = parseInt(searchParams.get("page"), 10) || 1;
   const keyword = searchParams.get("k") || "";
   const [page, setPage] = useState(pageurl);
+  const [categoryState, setCategoryState] = useState("");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts({ keyword, page }));
-  }, [dispatch, keyword, page]);
+    dispatch(fetchProducts({ keyword, page, category: categoryState }));
+  }, [dispatch, keyword, page, categoryState]);
 
   useEffect(() => {
     if (error) {
@@ -36,6 +38,10 @@ const Product = () => {
 
   const handlePageChange = (selectedPage) => {
     setPage(selectedPage);
+  };
+
+  const handleCategory = async (cat) => {
+    setCategoryState(cat);
   };
   return loading ? (
     <Loader />
@@ -53,7 +59,11 @@ const Product = () => {
                   <ul>
                     {category.map((cat, index) => {
                       return (
-                        <li key={index} className="m-4">
+                        <li
+                          key={index}
+                          className="m-4"
+                          onClick={() => handleCategory(cat)}
+                        >
                           <button className="cursor-pointer">{cat}</button>
                         </li>
                       );
