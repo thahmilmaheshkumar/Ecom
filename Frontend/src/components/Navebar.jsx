@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const MotionLink = motion.create(Link);
 const MotionShoppingCart = motion.create(ShoppingCart);
@@ -11,6 +12,8 @@ const Navebar = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
+  const { isAuthenticate } = useSelector((state) => state.user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,7 +115,7 @@ const Navebar = () => {
         <div className="hidden md:flex">
           <MotionLink to="register">
             <motion.button
-              className="flex gap-3 text-white bg-blue-500 px-3 py-2 rounded-md items-center"
+              className={`flex gap-3 ${isAuthenticate && "hidden"} text-white bg-blue-500 px-3 py-2 rounded-md items-center`}
               whileHover={{ scale: 1.1, backgroundColor: "#3b82f6" }}
               whileTap={{ scale: 0.9, backgroundColor: "#3b82f6" }}
               transition={{ type: "tween" }}
@@ -173,6 +176,17 @@ const Navebar = () => {
               transition={{ type: "tween" }}
             >
               Contact Us
+            </MotionLink>
+
+            <MotionLink
+              to="register"
+              onClick={() => setOpen(false)}
+              className={`text-gray-700 font-semibold ${isAuthenticate && "hidden"} hover:text-blue-800 transitio`}
+              whileHover={{ scale: 1.1, color: "#3b82f6" }}
+              whileTap={{ scale: 0.5 }}
+              transition={{ type: "tween" }}
+            >
+              Register
             </MotionLink>
           </div>
         </div>

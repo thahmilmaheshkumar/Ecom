@@ -1,3 +1,5 @@
+import handleError from "../helpper/handleError.js";
+
 export default (err, req, res, next) => {
   // console.log(err);
   err.statusCode = err.statusCode || 500;
@@ -11,6 +13,6 @@ export default (err, req, res, next) => {
 
   res.status(err.statusCode).json({
     success: false,
-    error: err.message,
+    message: err.message,
   });
 };

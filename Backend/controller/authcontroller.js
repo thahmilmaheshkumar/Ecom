@@ -3,6 +3,7 @@ import user from "../model/user.js";
 import cookie from "../helpper/cookie.js";
 import sendEmail from "../helpper/mail.js";
 import crypto from "crypto";
+import { v2 as cloudinary } from "cloudinary";
 
 export const register = async (req, res, next) => {
   const userExist = await user.findOne({ email: req.body.email });
@@ -10,13 +11,19 @@ export const register = async (req, res, next) => {
     return next(new handleError("User already exist", 400));
   }
 
+  const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+    folder: "Ecom_avathar",
+    width: 400,
+    crop: "scale",
+  });
+
   const newUser = await user.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     avathar: {
-      public_id: "sample id",
-      url: "sample url",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
 

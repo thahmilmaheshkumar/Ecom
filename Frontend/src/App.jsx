@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import ViewProduct from "./pages/ViewProduct";
 import Product from "./pages/Product";
+import Register from "./pages/user/Register";
 
 function App() {
   return (
