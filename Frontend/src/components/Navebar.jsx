@@ -13,7 +13,7 @@ const Navebar = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const { isAuthenticate } = useSelector((state) => state.user);
+  const { isAuthenticate, user } = useSelector((state) => state.user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,6 +124,20 @@ const Navebar = () => {
               Register
             </motion.button>
           </MotionLink>
+
+          <MotionLink
+            to="profile"
+            onClick={() => setOpen(false)}
+            className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 transitio`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.5 }}
+            transition={{ type: "tween" }}
+          >
+            <img
+              src={user?.avathar?.url}
+              className="h-10 w-10 object-cover rounded-full"
+            />
+          </MotionLink>
         </div>
 
         <div className="flex md:hidden ">
@@ -187,6 +201,17 @@ const Navebar = () => {
               transition={{ type: "tween" }}
             >
               Register
+            </MotionLink>
+
+            <MotionLink
+              to="profile"
+              onClick={() => setOpen(false)}
+              className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 transitio`}
+              whileHover={{ scale: 1.1, color: "#3b82f6" }}
+              whileTap={{ scale: 0.5 }}
+              transition={{ type: "tween" }}
+            >
+              Profile
             </MotionLink>
           </div>
         </div>

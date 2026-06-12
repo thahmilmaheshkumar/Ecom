@@ -10,6 +10,8 @@ export const register = createAsyncThunk(
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
       });
       return data;
     } catch (error) {
@@ -21,6 +23,22 @@ export const register = createAsyncThunk(
             "Registeration failed.Please try again",
         );
       }
+    }
+  },
+);
+
+//Login
+export const login = createAsyncThunk(
+  "user/login",
+  async (user, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`/api/auth/login`, user);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Registeration failed.Please try again",
+      );
     }
   },
 );
@@ -61,6 +79,27 @@ const userSlice = createSlice({
         localStorage.setItem("isauth", JSON.stringify(state.isAuthenticate));
       })
       .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticate = false;
+        state.user = null;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.success = action.payload.success;
+        state.user = action.payload?.user || null;
+        state.isAuthenticate = Boolean(action.payload?.user);
+        localStorage.setItem("user", JSON.stringify(state.user));
+        localStorage.setItem("isauth", JSON.stringify(state.isAuthenticate));
+      })
+      .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.isAuthenticate = false;
         state.user = null;

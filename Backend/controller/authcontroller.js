@@ -6,14 +6,15 @@ import crypto from "crypto";
 import { v2 as cloudinary } from "cloudinary";
 
 export const register = async (req, res, next) => {
+  const { avatar } = req.body;
   const userExist = await user.findOne({ email: req.body.email });
   if (userExist) {
     return next(new handleError("User already exist", 400));
   }
 
-  const myCloud = await cloudinary.uploader.upload(req.body.avatar, {
+  const myCloud = await cloudinary.uploader.upload(avatar, {
     folder: "Ecom_avathar",
-    width: 400,
+    width: 110,
     crop: "scale",
   });
 
