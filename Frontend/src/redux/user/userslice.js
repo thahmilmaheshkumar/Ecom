@@ -43,6 +43,23 @@ export const login = createAsyncThunk(
   },
 );
 
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`/api/auth/logout`, {
+        withCredentials: true,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Registeration failed.Please try again",
+      );
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -103,6 +120,26 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticate = false;
         state.user = null;
+        state.error = action.payload;
+        localStorage.removeItem("user");
+        localStorage.removeItem("isauth");
+      });
+
+    builder
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.isAuthenticate = false;
+        state.user = null;
+        state.success = action.payload.success;
+        localStorage.removeItem("user");
+        localStorage.removeItem("isauth");
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "./Loader";
+import toast from "react-hot-toast";
+import { logout, removeError, removeSuccess } from "../redux/user/userslice";
 
 const MotionLink = motion.create(Link);
 const MotionShoppingCart = motion.create(ShoppingCart);
@@ -13,14 +16,38 @@ const Navebar = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const { isAuthenticate, user } = useSelector((state) => state.user);
+  const { isAuthenticate, user, loading, error, success } = useSelector(
+    (state) => state.user,
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { autoClose: 300 });
+      dispatch(removeError());
+    }
+  }, [dispatch, error]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success("Logout Success", { autoClose: 3000 });
+      dispatch(removeSuccess());
+    }
+  }, [dispatch, success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     navigate(`/products?k=${search}`);
   };
 
-  return (
+  const handleLogout = async () => {
+    dispatch(logout());
+  };
+
+  return loading ? (
+    <Loader />
+  ) : (
     <motion.nav
       className="sticky top-0 shadow-md bg-white z-50"
       initial={{ y: -100, opacity: 0 }}
@@ -98,7 +125,7 @@ const Navebar = () => {
         </form>
 
         <div className="relative">
-          <MotionLink to="cart">
+          <MotionLink to="/cart">
             <MotionShoppingCart
               size={20}
               className="relative text-gray-700 hover:text-blue-800 transition"
@@ -112,8 +139,19 @@ const Navebar = () => {
           </span>
         </div>
 
-        <div className="hidden md:flex">
-          <MotionLink to="register">
+        <div className="hidden md:flex gap-4 items-center">
+          <MotionLink
+            to="/login"
+            onClick={() => setOpen(false)}
+            className={`text-gray-700 font-semibold ${isAuthenticate && "hidden"} hover:text-blue-800 hover:underline`}
+            whileHover={{ scale: 1.1, color: "#3b82f6" }}
+            whileTap={{ scale: 0.5 }}
+            transition={{ type: "tween" }}
+          >
+            Login
+          </MotionLink>
+
+          <MotionLink to="/register">
             <motion.button
               className={`flex gap-3 ${isAuthenticate && "hidden"} text-white bg-blue-500 px-3 py-2 rounded-md items-center`}
               whileHover={{ scale: 1.1, backgroundColor: "#3b82f6" }}
@@ -126,9 +164,9 @@ const Navebar = () => {
           </MotionLink>
 
           <MotionLink
-            to="profile"
+            to="/profile"
             onClick={() => setOpen(false)}
-            className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 transitio`}
+            className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 `}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.5 }}
             transition={{ type: "tween" }}
@@ -138,6 +176,13 @@ const Navebar = () => {
               className="h-10 w-10 object-cover rounded-full"
             />
           </MotionLink>
+
+          <span
+            onClick={handleLogout}
+            className={`text-red-500 ${isAuthenticate || "hidden"} cursor-pointer hover:underline transition ease-in duration-300`}
+          >
+            Logout
+          </span>
         </div>
 
         <div className="flex md:hidden ">
@@ -193,9 +238,20 @@ const Navebar = () => {
             </MotionLink>
 
             <MotionLink
-              to="register"
+              to="/login"
               onClick={() => setOpen(false)}
-              className={`text-gray-700 font-semibold ${isAuthenticate && "hidden"} hover:text-blue-800 transitio`}
+              className={`text-gray-700 font-semibold ${isAuthenticate && "hidden"} hover:text-blue-800`}
+              whileHover={{ scale: 1.1, color: "#3b82f6" }}
+              whileTap={{ scale: 0.5 }}
+              transition={{ type: "tween" }}
+            >
+              Login
+            </MotionLink>
+
+            <MotionLink
+              to="/register"
+              onClick={() => setOpen(false)}
+              className={`text-gray-700 font-semibold ${isAuthenticate && "hidden"} hover:text-blue-800 `}
               whileHover={{ scale: 1.1, color: "#3b82f6" }}
               whileTap={{ scale: 0.5 }}
               transition={{ type: "tween" }}
@@ -204,15 +260,22 @@ const Navebar = () => {
             </MotionLink>
 
             <MotionLink
-              to="profile"
+              to="/profile"
               onClick={() => setOpen(false)}
-              className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 transitio`}
+              className={`text-gray-700 font-semibold ${isAuthenticate || "hidden"} hover:text-blue-800 `}
               whileHover={{ scale: 1.1, color: "#3b82f6" }}
               whileTap={{ scale: 0.5 }}
               transition={{ type: "tween" }}
             >
               Profile
             </MotionLink>
+
+            <span
+              onClick={handleLogout}
+              className={`text-red-500 ${isAuthenticate || "hidden"} cursor-pointer hover:underline transition ease-in duration-300`}
+            >
+              Logout
+            </span>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import productRouter from "./routes/productroute.js";
 import orderRouter from "./routes/orderroute.js";
 import fileUpload from "express-fileupload";
+import cors from "cors";
 
 const app = express();
 
@@ -17,6 +18,11 @@ app.use(
   }),
 );
 
+app.use(
+  cors({
+    credentials: true,
+  }),
+);
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(

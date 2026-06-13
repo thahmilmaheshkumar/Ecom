@@ -102,10 +102,11 @@ const Register = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="">Email</label>
+            <label htmlFor="email">Email</label>
             <motion.input
               type="email"
               name="email"
+              id="email"
               onChange={handleChange}
               placeholder="Email"
               animate={
@@ -118,10 +119,11 @@ const Register = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="">Password</label>
+            <label htmlFor="password">Password</label>
             <motion.input
               name="password"
               type="password"
+              id="password"
               onChange={handleChange}
               placeholder="Password"
               animate={

@@ -8,6 +8,7 @@ import ViewProduct from "./pages/ViewProduct";
 import Product from "./pages/Product";
 import Register from "./pages/user/Register";
 import Profile from "./pages/Profile";
+import UpdateProfile from "./pages/UpdateProfile";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/products/:id" element={<ViewProduct />} />
         <Route path="/products" element={<Product />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/update" element={<UpdateProfile />} />
       </Routes>
     </BrowserRouter>
   );
