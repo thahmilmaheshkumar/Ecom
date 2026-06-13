@@ -31,7 +31,6 @@ const Navebar = () => {
 
   useEffect(() => {
     if (success) {
-      toast.success("Logout Success", { autoClose: 3000 });
       dispatch(removeSuccess());
     }
   }, [dispatch, success]);

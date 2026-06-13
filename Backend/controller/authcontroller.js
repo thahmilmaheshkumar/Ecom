@@ -258,3 +258,33 @@ export const changePassword = async (req, res, next) => {
     message: "Password changed successful",
   });
 };
+
+export const editProfile = async (req, res, next) => {
+  const { name, email, avatar } = req.body;
+
+  const option = { name, email };
+  if (avatar && avatar !== "") {
+    if (req.user?.avathar?.public_id) {
+      const destroy = await cloudinary.uploader.destroy(
+        req.user?.avathar?.public_id,
+      );
+    }
+
+    const upload = await cloudinary.uploader.upload(avatar, {
+      folder: "Ecom_avathar",
+      width: 110,
+      crop: "scale",
+    });
+
+    option.avathar = {
+      public_id: upload.public_id,
+      url: upload.secure_url,
+    };
+  }
+
+  const update = await user.findByIdAndUpdate(req.user?._id, option, {
+    new: true,
+  });
+
+  res.status(200).json({ success: true, message: "Profile updated", update });
+};

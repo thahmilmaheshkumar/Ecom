@@ -43,6 +43,7 @@ export const login = createAsyncThunk(
   },
 );
 
+//logout
 export const logout = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
@@ -55,6 +56,32 @@ export const logout = createAsyncThunk(
       return rejectWithValue(
         error.response?.data?.message ||
           "Registeration failed.Please try again",
+      );
+    }
+  },
+);
+
+//edit profile
+export const editProfile = createAsyncThunk(
+  "user/editprofile",
+  async (profileData, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `/api/auth/update/profile`,
+        profileData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Profile update failed.Please try again",
       );
     }
   },
@@ -141,6 +168,24 @@ const userSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload;
+      });
+
+    builder
+      .addCase(editProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = action.payload?.update;
+        state.success = action.payload.success;
+        localStorage.setItem("user", JSON.stringify(state.user));
+        localStorage.setItem("isauth", JSON.stringify(state.isAuthenticate));
+      })
+      .addCase(editProfile.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
       });
   },
 });

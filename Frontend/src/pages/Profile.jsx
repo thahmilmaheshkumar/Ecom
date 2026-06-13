@@ -15,7 +15,7 @@ const Profile = () => {
   useEffect(() => {
     if (!isAuthenticate) {
       toast.error("Please login...", { autoClose: 300 });
-      navigate("/login");
+      navigate("/");
     }
   }, [isAuthenticate]);
 

@@ -45,7 +45,7 @@ const Register = () => {
     if (e.target.name === "avatar") {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
+      reader.onload = () => {
         if (reader.readyState === 2) {
           setAvatar(reader.result);
           setPreview(reader.result);
@@ -77,9 +77,7 @@ const Register = () => {
     dispatch(register(form));
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <div className="h-screen flex items-center justify-center ">
       <div className="shadow-xl w-100 rounded-4xl p-10 ">
         <div className="flex justify-center">
@@ -151,18 +149,37 @@ const Register = () => {
 
           <div className="flex justify-center">
             <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0px 8px 25px rgba(0,0,0,0.2)",
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut",
-              }}
-              className="h-15 w-90 py-4 px-9 cursor-pointer bg-blue-600 rounded-2xl text-white font-semibold"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "tween" }}
+              type="submit"
+              className={`w-full p-4 bg-blue-700 text-white rounded-xl mb-2 cursor-pointer ${
+                loading
+                  ? "bg-blue-500 cursor-not-allowed"
+                  : "bg-blue-700 hover:bg-blue-800"
+              }`}
+              disabled={loading}
             >
-              Sign Up
+              {loading ? (
+                <div className="flex items-center justify-center gap-1">
+                  {[0, 1, 2].map((dot) => (
+                    <motion.span
+                      key={dot}
+                      className="w-2 h-2 bg-white rounded-full"
+                      animate={{
+                        y: [0, -8, 0],
+                      }}
+                      transition={{
+                        duration: 0.5,
+                        repeat: Infinity,
+                        delay: dot * 0.2,
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </motion.button>
           </div>
 
