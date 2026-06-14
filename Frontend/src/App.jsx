@@ -9,6 +9,7 @@ import Product from "./pages/Product";
 import Register from "./pages/user/Register";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
+import ResetPassword from "./pages/password/ResetPassword";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/products" element={<Product />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/update" element={<UpdateProfile />} />
+        <Route path="/forgot/password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );

@@ -125,7 +125,7 @@ const Login = () => {
             </motion.button>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex flex-col gap2 justify-center items-center">
             <p>
               New User?
               <Link
@@ -133,6 +133,16 @@ const Login = () => {
                 className="underline text-blue-400 ml-1 text-lg"
               >
                 Sign Up
+              </Link>
+            </p>
+
+            <p>
+              Forgot password?
+              <Link
+                to={"/forgot/password"}
+                className="underline text-blue-400 ml-1 text-lg"
+              >
+                Forgot
               </Link>
             </p>
           </div>

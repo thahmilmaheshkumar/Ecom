@@ -211,7 +211,7 @@ export const forgotPassword = async (req, res, next) => {
 };
 
 export const resetPassword = async (req, res, next) => {
-  const token = req.params.token;
+  const token = req.body.token;
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(token)
@@ -223,17 +223,21 @@ export const resetPassword = async (req, res, next) => {
   });
 
   if (!userExist) {
-    return next(new handleError("Invalid or expired reset token", 400));
+    return next(new handleError("Invalid OTP", 400));
   }
 
-  userExist.password = req.body.password;
   userExist.resetPasswordToken = undefined;
   userExist.resetPasswordExpire = undefined;
   await userExist.save();
 
+  const authToken = await userExist.generateToken();
+
+  cookie(res, authToken);
+
   res.status(200).json({
     success: true,
     message: "Password changed successful",
+    user: userExist,
   });
 };
 

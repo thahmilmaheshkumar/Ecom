@@ -18,7 +18,7 @@ router.route("/login").post(login);
 router.route("/logout").get(auth, logout);
 router.route("/me").get(auth, getUser);
 router.route("/forgot/password").post(forgotPassword);
-router.route("/reset/password/:token").post(resetPassword);
+router.route("/reset/password/").post(resetPassword);
 router.route("/password/change").post(auth, changePassword);
 router.route("/update/profile").post(auth, editProfile);
 
