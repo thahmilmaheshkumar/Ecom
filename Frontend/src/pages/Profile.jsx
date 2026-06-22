@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navebar from "../components/Navebar";
 import Title from "../components/Title";
+import Footer from "../components/Footer";
 
 const Profile = () => {
   const { isAuthenticate, user } = useSelector((state) => state.user);
@@ -49,18 +50,31 @@ const Profile = () => {
               </h2>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "tween" }}
-              className="w-full p-4 bg-blue-700 text-white rounded-xl mb-2 cursor-pointer"
-              onClick={() => navigate("/profile/update")}
-            >
-              Edit Profile
-            </motion.button>
+            <div className="flex w-full gap-7">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "tween" }}
+                className="w-full p-4 flex-1 bg-blue-700 text-white rounded-xl mb-2 cursor-pointer"
+                onClick={() => navigate("/profile/update")}
+              >
+                Edit Profile
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "tween" }}
+                className="w-full p-4 flex-1 bg-blue-700 text-white rounded-xl mb-2 cursor-pointer"
+                onClick={() => navigate("/password/change")}
+              >
+                Change Password
+              </motion.button>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

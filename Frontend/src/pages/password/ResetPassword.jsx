@@ -10,6 +10,8 @@ import {
   resetPassword,
 } from "../../redux/password/password";
 import OtpInput from "react-otp-input";
+import Footer from "../../components/Footer";
+import Title from "../../components/Title";
 
 const ResetPassword = () => {
   const { loading, error, success, message, isVerified, emailSent } =
@@ -62,6 +64,7 @@ const ResetPassword = () => {
   return (
     <>
       <Navebar />
+      <Title title={"Reset Password"} />
       <div className="h-screen w-screen flex justify-center items-center flex-col gap-6">
         <div className="text-2xl font-bold text-blue-600">
           <h2>Forgot Password</h2>
@@ -119,20 +122,6 @@ const ResetPassword = () => {
                       />
                     )}
                   />
-                  {/* <motion.input
-                    id="otp"
-                    name="otp"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    animate={
-                      otpError ? { x: [0, -50, 50, -50, 50, 0] } : { x: 0 }
-                    }
-                    type="number"
-                    placeholder="OTP"
-                    className={`border-gray-400 border-2 rounded-xl p-4 h-12 focus:ring-2 focus:border-transparent outline-none focus:ring-blue-500 transition-all ${
-                      otpError ? "border-red-500" : "border-gray-300"
-                    }`}
-                  /> */}
                 </div>
               )}
 
@@ -175,6 +164,7 @@ const ResetPassword = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

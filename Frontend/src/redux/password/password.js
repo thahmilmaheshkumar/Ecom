@@ -4,6 +4,7 @@ import {
   isRejectedWithValue,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import { steps } from "framer-motion";
 
 export const resetPassword = createAsyncThunk(
   "password/resetpassword",
@@ -23,13 +24,32 @@ export const otpVerify = createAsyncThunk(
   "password/otpVerify",
   async ({ otp }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/api/auth/reset/password/`, {
+      const { data } = await axios.post(`/api/auth/reset/password`, {
         token: otp,
       });
       return data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Something went worng...",
+      );
+    }
+  },
+);
+
+export const changePassword = createAsyncThunk(
+  "password/changePassword",
+  async ({ oldPassword, newPassword }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`/api/auth/password/change`, {
+        oldPassword,
+        newPassword,
+      });
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(
+        error.response.data?.message || "Something went worng",
       );
     }
   },
@@ -85,6 +105,18 @@ const passwordSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
       state.success = false;
+    });
+
+    builder.addCase(changePassword.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.success = true;
+      state.message = action.payload.message;
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
     });
   },
 });
