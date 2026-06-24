@@ -13,11 +13,19 @@ import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import { toast } from "react-hot-toast";
 import { calculateDiscount } from "../helper/formate";
+import { addCartItems, removeSuccess } from "../redux/cart/cartSlice";
 
 const ViewProduct = () => {
   const { productDetails, loading, error } = useSelector(
     (state) => state.product,
   );
+
+  const {
+    loading: cartLoading,
+    success: cartSuccess,
+    message: cartMessage,
+    cartItems,
+  } = useSelector((state) => state.cart);
 
   const [cartNumber, setCartNumber] = useState(1);
 
@@ -42,6 +50,17 @@ const ViewProduct = () => {
       dispatch(removeError());
     }
   }, [error, dispatch]);
+
+  useEffect(() => {
+    if (cartSuccess) {
+      toast.success(cartMessage);
+      dispatch(removeSuccess());
+    }
+  }, [dispatch, cartSuccess, cartMessage]);
+
+  const handleAddToCart = () => {
+    dispatch(addCartItems({ id, quantity: cartNumber }));
+  };
 
   return loading ? (
     <Loader />
@@ -109,8 +128,11 @@ const ViewProduct = () => {
               </button>
             </div>
 
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 cursor-pointer hover:scale-105 ">
-              Add to Cart
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all duration-300 cursor-pointer hover:scale-105 "
+            >
+              {cartLoading ? "Adding..." : "Add to Cart"}
             </button>
           </div>
         </div>

@@ -1,8 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Rating from "./Rating";
+import { useDispatch } from "react-redux";
+import { addCartItems } from "../redux/cart/cartSlice";
 
 const Product = ({ product, rating }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleAddToCart = () => {
+    dispatch(addCartItems({ id: product?._id, quantity: 1 }));
+  };
   return (
     <Link
       to={`/products/${product?._id}`}
@@ -22,7 +30,10 @@ const Product = ({ product, rating }) => {
         <Rating rating={rating} />
         <div className="flex items-center justify-between">
           <p>Price: ${product?.price.toFixed(2)}</p>
-          <button className="bg-blue-500 text-white py-2 px-2 rounded-md hover:bg-blue-600 transition">
+          <button
+            onClick={handleAddToCart}
+            className="bg-blue-500 text-white py-2 px-2 rounded-md hover:bg-blue-600 transition"
+          >
             Add to Cart
           </button>
         </div>

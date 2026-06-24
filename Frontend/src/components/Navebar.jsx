@@ -20,6 +20,8 @@ const Navebar = () => {
     (state) => state.user,
   );
 
+  const { cartItems } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,6 +36,10 @@ const Navebar = () => {
       dispatch(removeSuccess());
     }
   }, [dispatch, success]);
+
+  useEffect(() => {
+    setCartCount(cartItems.length);
+  }, [cartItems]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
