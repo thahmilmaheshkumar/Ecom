@@ -4,31 +4,17 @@ import handleError from "../helpper/handleError.js";
 
 export const createOrder = async (req, res, next) => {
   const {
-    productsId,
+    products,
     taxPrice,
     shippingPrice,
-    quantity,
     paymentMethod,
     address,
+    totalAmount,
   } = req.body;
-
-  const product = await products.findById(productsId);
-
-  if (!product) {
-    return next(new handleError("Product not found", 404));
-  }
-
-  const totalAmount = Number(
-    product.price * quantity + taxPrice + shippingPrice,
-  );
 
   const order = await Order.create({
     user: req.user._id,
-    products: {
-      product: product._id,
-      quantity,
-      price: product.price,
-    },
+    products,
     address,
     taxPrice,
     shippingPrice,

@@ -4,10 +4,18 @@ import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { BadgeIndianRupee, IndianRupee, Trash, Trash2 } from "lucide-react";
 import CartItems from "../components/CartItems";
-import { clearCart } from "../redux/cart/cartSlice";
+import {
+  clearCart,
+  order,
+  removeError,
+  removeSuccess,
+} from "../redux/cart/cartSlice";
+import toast from "react-hot-toast";
 
 const Cart = () => {
-  const { cartItems, loading } = useSelector((state) => state.cart);
+  const { cartItems, loading, message, success, error } = useSelector(
+    (state) => state.cart,
+  );
   const subTotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
@@ -18,8 +26,40 @@ const Cart = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(removeError());
+    }
+  }, [dispatch, error]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success(message);
+      dispatch(removeSuccess());
+    }
+  }, [dispatch, message, success]);
+
   const handleClearCart = () => {
     dispatch(clearCart());
+  };
+
+  const handleOrder = () => {
+    const address = {
+      street: "arachalur",
+      city: "Erode",
+      state: "tamilnadu",
+      pincode: "688e7",
+    };
+    dispatch(
+      order({
+        products: cartItems,
+        tax,
+        shipping: shippingCharges,
+        total,
+        address,
+      }),
+    );
   };
 
   return (
@@ -87,7 +127,10 @@ const Cart = () => {
             </div>
 
             <div className="w-full">
-              <button className="bg-blue-600 w-full px-3 py-4 rounded-lg text-white cursor-pointer hover:scale-110 transition ease-in duration-200">
+              <button
+                onClick={handleOrder}
+                className="bg-blue-600 w-full px-3 py-4 rounded-lg text-white cursor-pointer hover:scale-110 transition ease-in duration-200"
+              >
                 {loading ? "Procceding..." : "Procced to order"}
               </button>
             </div>

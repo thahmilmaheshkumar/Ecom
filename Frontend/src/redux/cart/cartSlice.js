@@ -23,6 +23,27 @@ export const addCartItems = createAsyncThunk(
   },
 );
 
+export const order = createAsyncThunk(
+  "cart/order",
+  async ({ products, tax, shipping, total, address }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`/api/order/create`, {
+        products,
+        taxPrice: tax,
+        shippingPrice: shipping,
+        paymentMethod: "upi",
+        address,
+        totalAmount: total,
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data?.message || "Something went worng",
+      );
+    }
+  },
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
@@ -74,6 +95,21 @@ const cartSlice = createSlice({
         localStorage.setItem("cart", JSON.stringify(state.cartItems));
       })
       .addCase(addCartItems.rejected, (state) => {});
+
+    builder
+      .addCase(order.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(order.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.message = action.payload.message || "Order success";
+      })
+      .addCase(order.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
