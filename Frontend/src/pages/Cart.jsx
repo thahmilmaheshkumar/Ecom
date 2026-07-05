@@ -11,6 +11,7 @@ import {
   removeSuccess,
 } from "../redux/cart/cartSlice";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Cart = () => {
   const { cartItems, loading, message, success, error } = useSelector(
@@ -44,23 +45,7 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
-  const handleOrder = () => {
-    const address = {
-      street: "arachalur",
-      city: "Erode",
-      state: "tamilnadu",
-      pincode: "688e7",
-    };
-    dispatch(
-      order({
-        products: cartItems,
-        tax,
-        shipping: shippingCharges,
-        total,
-        address,
-      }),
-    );
-  };
+  const handleOrder = () => {};
 
   return (
     <>
@@ -127,12 +112,12 @@ const Cart = () => {
             </div>
 
             <div className="w-full">
-              <button
+              <motion.button
                 onClick={handleOrder}
-                className="bg-blue-600 w-full px-3 py-4 rounded-lg text-white cursor-pointer hover:scale-110 transition ease-in duration-200"
+                className="bg-blue-600 active:bg-blue-300  w-full px-3 py-4 rounded-lg text-white cursor-pointer hover:scale-110 transition ease-in duration-200"
               >
                 {loading ? "Procceding..." : "Procced to order"}
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>

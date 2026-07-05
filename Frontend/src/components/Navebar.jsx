@@ -138,10 +138,11 @@ const Navebar = () => {
               whileTap={{ scale: 0.5 }}
               transition={{ type: "tween" }}
             />
+
+            <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center min-h-5 min-w-5">
+              {cartCount}
+            </span>
           </MotionLink>
-          <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center min-h-5 min-w-5">
-            {cartCount}
-          </span>
         </div>
 
         <div className="hidden md:flex gap-4 items-center">
