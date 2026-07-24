@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    user_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-    },
     name: {
       type: String,
       required: [true, "Please enter the name"],

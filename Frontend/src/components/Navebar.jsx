@@ -48,6 +48,7 @@ const Navebar = () => {
 
   const handleLogout = async () => {
     dispatch(logout());
+    navigate("/");
   };
 
   return loading ? (
