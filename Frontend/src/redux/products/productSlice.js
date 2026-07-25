@@ -5,7 +5,9 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async ({ keyword, page = 1, category }, { rejectWithValue }) => {
     try {
-      let api = "/api/product/products?page=" + page;
+      let api =
+        "https://ecom-backend-self.vercel.app/api/product/products?page=" +
+        page;
       if (category) {
         api += `&filter=${category}`;
       }
@@ -28,7 +30,7 @@ export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
   async (id, { rejectWithValue }) => {
     try {
-      const link = `/api/product/product/?i=${id}`;
+      const link = `https://ecom-backend-self.vercel.app/api/product/product/?i=${id}`;
       const { data } = await axios.get(link);
       return data.product;
     } catch (error) {
