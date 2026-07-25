@@ -20,7 +20,6 @@ app.use(
 
 app.use(
   cors({
-    origin: "https://ecom-frontend-zeta-three.vercel.app/",
     credentials: true,
   }),
 );
