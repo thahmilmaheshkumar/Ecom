@@ -7,7 +7,7 @@ export const addCartItems = createAsyncThunk(
   async ({ id, quantity }, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `https://ecom-backend-self.vercel.app/api/product/product?i=${id}`,
+        `${import.meta.env.VITE_API_URL}/api/product/product?i=${id}`,
       );
       // console.log(data);
       return {
@@ -30,7 +30,7 @@ export const order = createAsyncThunk(
   async ({ products, tax, shipping, total, address }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `https://ecom-backend-self.vercel.app/api/order/create`,
+        `${import.meta.env.VITE_API_URL}/api/order/create`,
         {
           products,
           taxPrice: tax,

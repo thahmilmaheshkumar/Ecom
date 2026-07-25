@@ -7,7 +7,7 @@ export const register = createAsyncThunk(
   async (user, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        "https://ecom-backend-self.vercel.app/api/auth/register",
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         user,
         {
           headers: {
@@ -37,7 +37,7 @@ export const login = createAsyncThunk(
   async (user, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `https://ecom-backend-self.vercel.app/api/auth/login`,
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         user,
       );
       return data;
@@ -56,7 +56,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `https://ecom-backend-self.vercel.app/api/auth/logout`,
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
         {
           withCredentials: true,
         },

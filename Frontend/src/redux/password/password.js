@@ -11,7 +11,7 @@ export const resetPassword = createAsyncThunk(
   async ({ email }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `https://ecom-backend-self.vercel.app/api/auth/forgot/password`,
+        `${import.meta.env.VITE_API_URL}/api/auth/forgot/password`,
         { email },
       );
       return data;
@@ -28,7 +28,7 @@ export const otpVerify = createAsyncThunk(
   async ({ otp }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `https://ecom-backend-self.vercel.app/api/auth/reset/password`,
+        `${import.meta.env.VITE_API_URL}/api/auth/reset/password`,
         {
           token: otp,
         },
@@ -47,7 +47,7 @@ export const changePassword = createAsyncThunk(
   async ({ oldPassword, newPassword }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `https://ecom-backend-self.vercel.app/api/auth/password/change`,
+        `${import.meta.env.VITE_API_URL}/api/auth/password/change`,
         {
           oldPassword,
           newPassword,

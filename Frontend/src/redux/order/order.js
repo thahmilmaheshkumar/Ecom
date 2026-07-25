@@ -7,7 +7,7 @@ export const fetchOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        `https://ecom-backend-self.vercel.app/api/order/myorders`,
+        `${import.meta.env.VITE_API_URL}/api/order/myorders`,
         {
           withCredentials: true,
         },
