@@ -6,9 +6,12 @@ export const fetchOrders = createAsyncThunk(
   "order/fetchOrders",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`/api/order/myorders`, {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        `https://ecom-backend-self.vercel.app/api/order/myorders`,
+        {
+          withCredentials: true,
+        },
+      );
       // console.log(data);
       return data;
     } catch (error) {
