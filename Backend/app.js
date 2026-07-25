@@ -20,8 +20,9 @@ app.use(
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://ecom-frontend-zeta-three.vercel.app",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   }),
 );
 app.use(express.json({ limit: "50mb" }));
