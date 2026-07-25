@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
           required: [true, "Please enter the public id"],
         },
 
-        url: {
+        urls: {
           type: String,
           required: [true, "Please enter the image url"],
         },

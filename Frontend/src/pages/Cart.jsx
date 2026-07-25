@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import Navebar from "../components/Navebar";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { BadgeIndianRupee, IndianRupee, Trash, Trash2 } from "lucide-react";
+import {
+  BadgeIndianRupee,
+  IndianRupee,
+  ShoppingCart,
+  Trash,
+  Trash2,
+} from "lucide-react";
 import CartItems from "../components/CartItems";
 import {
   clearCart,
@@ -12,11 +18,13 @@ import {
 } from "../redux/cart/cartSlice";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cartItems, loading, message, success, error } = useSelector(
     (state) => state.cart,
   );
+  const { isAuthenticate } = useSelector((state) => state.user);
   const subTotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
@@ -26,6 +34,7 @@ const Cart = () => {
   const total = subTotal + shippingCharges + tax;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (error) {
@@ -45,9 +54,12 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
-  const handleOrder = () => {};
+  const handleOrder = () => {
+    sessionStorage.setItem("canCheckout", true);
+    navigate("/checkout");
+  };
 
-  return (
+  return isAuthenticate ? (
     <>
       <Navebar />
       <main className="flex gap-7 w-full flex-col md:flex-row md:justify-between p-2">
@@ -70,7 +82,7 @@ const Cart = () => {
               </p>
             ) : (
               cartItems.map((item, index) => {
-                return <CartItems item={item} key={index} />;
+                return <CartItems item={item} key={index} order={false} />;
               })
             )}
           </div>
@@ -124,6 +136,30 @@ const Cart = () => {
       </main>
       <Footer />
     </>
+  ) : (
+    <div className="h-screen">
+      <Navebar />
+      <main className="h-1/2 w-full">
+        <div className="h-full w-full flex flex-col gap-7 justify-center items-center">
+          <ShoppingCart size={100} className="text-gray-400" />
+
+          <h1 className="text-3xl font-semibold text-black">
+            Missing Cart Items?
+          </h1>
+
+          <Link to={"/login"}>
+            <button className="bg-blue-500 px-4 py-2 w-45 text-white rounded-lg cursor-pointer">
+              Login
+            </button>
+          </Link>
+
+          <Link className="text-blue-600" to={"/"}>
+            Continue Shopping
+          </Link>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { addCartItems, removeItemCart } from "../redux/cart/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
 
-const CartItems = ({ item }) => {
+const CartItems = ({ item, order = false }) => {
   //   const [cartNumber, setCartNumber] = useState(item.quantity);
 
   const dispatch = useDispatch();
@@ -54,37 +54,39 @@ const CartItems = ({ item }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center">
-          <div>
-            <div className="flex items-center gap-1 md:gap-4 px-4 py-2 rounded-full">
-              <button
-                onClick={minus}
-                className="hover:text-blue-700 border rounded-full hover:scale-110 cursor-pointer transition ease-in duration-100"
-              >
-                <Minus size={18} />
-              </button>
+        {!order && (
+          <div className="flex items-center justify-center">
+            <div>
+              <div className="flex items-center gap-1 md:gap-4 px-4 py-2 rounded-full">
+                <button
+                  onClick={minus}
+                  className="hover:text-blue-700 border rounded-full hover:scale-110 cursor-pointer transition ease-in duration-100"
+                >
+                  <Minus size={18} />
+                </button>
 
-              <span className="text-2xl">{item.quantity}</span>
+                <span className="text-2xl">{item.quantity}</span>
 
-              <button
-                onClick={plus}
-                className="hover:text-blue-700 rounded-full border hover:scale-110 cursor-pointer transition ease-in duration-100"
-              >
-                <Plus size={18} />
-              </button>
+                <button
+                  onClick={plus}
+                  className="hover:text-blue-700 rounded-full border hover:scale-110 cursor-pointer transition ease-in duration-100"
+                >
+                  <Plus size={18} />
+                </button>
+              </div>
             </div>
-          </div>
-          <button onClick={() => handleRemoveItem(item.product)}>
-            <Trash2
-              className="text-red-500
+            <button onClick={() => handleRemoveItem(item.product)}>
+              <Trash2
+                className="text-red-500
               cursor-pointer
               hover:scale-110
               transition
               ease-in
               duration-100"
-            />
-          </button>
-        </div>
+              />
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

@@ -124,10 +124,12 @@ const Navebar = () => {
             value={search}
             className=" md:flex overflow-hidden px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md text-sm w-32 md:w-72 shadow-sm"
           />
-          <Search
-            size={18}
-            className="ml-2 text-blue-500 font-semibold cursor-pointer"
-          />
+          <button type="submit">
+            <Search
+              size={18}
+              className="ml-2 text-blue-500 font-semibold cursor-pointer"
+            />
+          </button>
         </form>
 
         <div className="relative">
@@ -147,6 +149,17 @@ const Navebar = () => {
         </div>
 
         <div className="hidden md:flex gap-4 items-center">
+          <MotionLink
+            to="/order"
+            onClick={() => setOpen(false)}
+            className={`text-gray-700 font-semibold ${!isAuthenticate && "hidden"} hover:text-blue-800 hover:underline`}
+            whileHover={{ scale: 1.1, color: "#3b82f6" }}
+            whileTap={{ scale: 0.5 }}
+            transition={{ type: "tween" }}
+          >
+            Order
+          </MotionLink>
+
           <MotionLink
             to="/login"
             onClick={() => setOpen(false)}
@@ -242,6 +255,17 @@ const Navebar = () => {
               transition={{ type: "tween" }}
             >
               Contact Us
+            </MotionLink>
+
+            <MotionLink
+              to="/order"
+              onClick={() => setOpen(false)}
+              className={`text-gray-700 font-semibold ${!isAuthenticate && "hidden"} hover:text-blue-800 hover:underline`}
+              whileHover={{ scale: 1.1, color: "#3b82f6" }}
+              whileTap={{ scale: 0.5 }}
+              transition={{ type: "tween" }}
+            >
+              Order
             </MotionLink>
 
             <MotionLink

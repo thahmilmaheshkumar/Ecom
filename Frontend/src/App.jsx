@@ -12,6 +12,9 @@ import UpdateProfile from "./pages/UpdateProfile";
 import ResetPassword from "./pages/password/ResetPassword";
 import ChangePassword from "./pages/password/ChangePassword";
 
+import CheckOut from "./components/CheckOut";
+import OrdersPage from "./pages/OrdersPage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +31,8 @@ function App() {
         <Route path="/profile/update" element={<UpdateProfile />} />
         <Route path="/forgot/password" element={<ResetPassword />} />
         <Route path="/password/change" element={<ChangePassword />} />
+        <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/order" element={<OrdersPage />} />
       </Routes>
     </BrowserRouter>
   );

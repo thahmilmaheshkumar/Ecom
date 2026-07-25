@@ -27,14 +27,18 @@ export const order = createAsyncThunk(
   "cart/order",
   async ({ products, tax, shipping, total, address }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/api/order/create`, {
-        products,
-        taxPrice: tax,
-        shippingPrice: shipping,
-        paymentMethod: "upi",
-        address,
-        totalAmount: total,
-      });
+      const { data } = await axios.post(
+        `/api/order/create`,
+        {
+          products,
+          taxPrice: tax,
+          shippingPrice: shipping,
+          paymentMethod: "upi",
+          address,
+          totalAmount: total,
+        },
+        { withCredentials: true },
+      );
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -105,6 +109,9 @@ const cartSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.message = action.payload.message || "Order success";
+        sessionStorage.removeItem("canCheckout");
+        state.cartItems = [];
+        localStorage.removeItem("cart");
       })
       .addCase(order.rejected, (state, action) => {
         state.loading = false;
