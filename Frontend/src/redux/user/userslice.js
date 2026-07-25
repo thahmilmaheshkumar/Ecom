@@ -6,13 +6,17 @@ export const register = createAsyncThunk(
   "user/register",
   async (user, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("/api/auth/register", user, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const { data } = await axios.post(
+        "https://ecom-backend-self.vercel.app/api/auth/register",
+        user,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          maxBodyLength: Infinity,
+          maxContentLength: Infinity,
         },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity,
-      });
+      );
       return data;
     } catch (error) {
       if (error.response?.data?.message === "Could not decode base64") {
@@ -32,7 +36,10 @@ export const login = createAsyncThunk(
   "user/login",
   async (user, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/api/auth/login`, user);
+      const { data } = await axios.post(
+        `https://ecom-backend-self.vercel.app/api/auth/login`,
+        user,
+      );
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -48,9 +55,12 @@ export const logout = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`/api/auth/logout`, {
-        withCredentials: true,
-      });
+      const { data } = await axios.get(
+        `https://ecom-backend-self.vercel.app/api/auth/logout`,
+        {
+          withCredentials: true,
+        },
+      );
       return data;
     } catch (error) {
       return rejectWithValue(
@@ -67,7 +77,7 @@ export const editProfile = createAsyncThunk(
   async (profileData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        `/api/auth/update/profile`,
+        `https://ecom-backend-self.vercel.app/api/auth/update/profile`,
         profileData,
         {
           headers: {
