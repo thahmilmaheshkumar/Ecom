@@ -29,6 +29,7 @@ const CartItems = ({ item, order = false }) => {
 
   return (
     <>
+      {/* {console.log("items", item)} */}
       <div className="w-full flex justify-between min-h-30 overflow-hidden bg-gray-100 rounded-2xl p-3 md:p-5">
         <div className="flex gap-5 items-center">
           <div>

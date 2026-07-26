@@ -22,6 +22,29 @@ export const fetchOrders = createAsyncThunk(
   },
 );
 
+export const review = createAsyncThunk(
+  "order/review",
+  async ({ rating, comment, productId }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/product/product/review`,
+        {
+          rating,
+          comment,
+          productId,
+        },
+        { withCredentials: true },
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data?.message || "Something went worng",
+      );
+    }
+  },
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState: {
@@ -55,6 +78,19 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+      });
+
+    builder
+      .addCase(review.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(review.fulfilled, (state, action) => {
+        state.success = true;
+        state.loading = false;
+        state.message = "Review added";
+      })
+      .addCase(review.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });

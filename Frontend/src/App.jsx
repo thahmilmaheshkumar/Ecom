@@ -14,6 +14,7 @@ import ChangePassword from "./pages/password/ChangePassword";
 
 import CheckOut from "./components/CheckOut";
 import OrdersPage from "./pages/OrdersPage";
+import SingleOrder from "./pages/SingleOrder";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/password/change" element={<ChangePassword />} />
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/order" element={<OrdersPage />} />
+        <Route path="/orders/single/:id" element={<SingleOrder />} />
       </Routes>
     </BrowserRouter>
   );
