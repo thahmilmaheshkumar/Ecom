@@ -15,26 +15,39 @@ import ChangePassword from "./pages/password/ChangePassword";
 import CheckOut from "./components/CheckOut";
 import OrdersPage from "./pages/OrdersPage";
 import SingleOrder from "./pages/SingleOrder";
+import { useSelector } from "react-redux";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
+  const { isAuthenticate } = useSelector((state) => state.user);
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<Cart />} />
         <Route path="/products/:id" element={<ViewProduct />} />
         <Route path="/products" element={<Product />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/update" element={<UpdateProfile />} />
-        <Route path="/forgot/password" element={<ResetPassword />} />
-        <Route path="/password/change" element={<ChangePassword />} />
-        <Route path="/checkout" element={<CheckOut />} />
-        <Route path="/order" element={<OrdersPage />} />
-        <Route path="/orders/single/:id" element={<SingleOrder />} />
+
+        {isAuthenticate ? (
+          <>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile/update" element={<UpdateProfile />} />
+            <Route path="/forgot/password" element={<ResetPassword />} />
+            <Route path="/password/change" element={<ChangePassword />} />
+            <Route path="/checkout" element={<CheckOut />} />
+            <Route path="/order" element={<OrdersPage />} />
+            <Route path="/orders/single/:id" element={<SingleOrder />} />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </>
+        )}
+
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

@@ -9,6 +9,7 @@ export const register = createAsyncThunk(
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/register`,
         user,
+        { withCredentials: true },
         {
           headers: {
             "Content-Type": "multipart/form-data",
