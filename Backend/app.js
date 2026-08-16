@@ -7,6 +7,7 @@ import productRouter from "./routes/productroute.js";
 import orderRouter from "./routes/orderroute.js";
 import fileUpload from "express-fileupload";
 import cors from "cors";
+import paymentRouter from "./routes/paymentRoute.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(
 app.use("/api/auth/", router);
 app.use("/api/product/", productRouter);
 app.use("/api/order/", orderRouter);
+app.use("/api/payment/", paymentRouter);
 
 app.use(error);
 

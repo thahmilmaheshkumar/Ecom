@@ -35,10 +35,27 @@ export const order = createAsyncThunk(
           products,
           taxPrice: tax,
           shippingPrice: shipping,
-          paymentMethod: "upi",
           address,
           totalAmount: total,
         },
+        { withCredentials: true },
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data?.message || "Something went worng",
+      );
+    }
+  },
+);
+
+export const paymentProcess = createAsyncThunk(
+  "cart/paymentProcess",
+  async ({ orderId }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/payment/payment/process`,
+        { orderId },
         { withCredentials: true },
       );
       return data;
@@ -58,6 +75,11 @@ const cartSlice = createSlice({
     error: null,
     message: null,
     loading: false,
+    razorpayOrderId: null,
+    amount: null,
+    currency: null,
+    keyId: null,
+    orderId: null,
   },
   reducers: {
     removeError: (state) => {
@@ -113,9 +135,30 @@ const cartSlice = createSlice({
         state.message = action.payload.message || "Order success";
         sessionStorage.removeItem("canCheckout");
         state.cartItems = [];
+        state.orderId = action.payload.order._id;
+        // console.log("Order ID:", state.orderId, action.payload.order._id); // Log the order ID
         localStorage.removeItem("cart");
       })
       .addCase(order.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(paymentProcess.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(paymentProcess.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.message = "Payment process initiated";
+        state.razorpayOrderId = action.payload.razorpayOrderId;
+        state.amount = action.payload.amount;
+        state.currency = action.payload.currency;
+        state.keyId = action.payload.keyId;
+      })
+      .addCase(paymentProcess.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -10,6 +10,7 @@ import { calculateDiscount } from "../helper/formate";
 import toast from "react-hot-toast";
 import Navebar from "../components/Navebar";
 import Footer from "../components/Footer";
+import Imageslider from "../components/Imageslider";
 
 const steps = [
   "Order Placed",

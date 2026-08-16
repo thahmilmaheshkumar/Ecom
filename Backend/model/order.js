@@ -57,14 +57,25 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    paymentId: {
+      type: String,
+      default: "",
+    },
+
+    orderId: {
+      type: String,
+      default: "",
+    },
+
     paymentMethod: {
       type: String,
       required: true,
+      default: "razorpay",
     },
 
     orderStatus: {
       type: String,
-      default: "Order Placed",
+      default: "pending",
     },
 
     paidAt: {

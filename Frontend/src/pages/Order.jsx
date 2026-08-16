@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   clearCart,
   order,
+  paymentProcess,
   removeError,
   removeSuccess,
 } from "../redux/cart/cartSlice";
@@ -13,11 +14,23 @@ import Footer from "../components/Footer";
 import CartItems from "../components/CartItems";
 import { motion } from "framer-motion";
 import { IndianRupee } from "lucide-react";
+import axios from "axios";
 
 const Order = () => {
-  const { cartItems, loading, message, success, error } = useSelector(
-    (state) => state.cart,
-  );
+  const {
+    cartItems,
+    loading,
+    message,
+    success,
+    error,
+    razorpayOrderId,
+    amount,
+    currency,
+    keyId,
+    orderId,
+  } = useSelector((state) => state.cart);
+
+  const { user } = useSelector((state) => state.user);
   const subTotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
@@ -65,11 +78,29 @@ const Order = () => {
     }
   }, [dispatch, message, success]);
 
+  const loader = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        return resolve(true);
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
   const handleChange = (e) => {
     setDetails({ ...deatils, [e.target.name]: e.target.value });
     // console.log(deatils);
   };
-  const handleOrder = () => {
+  const handleOrder = async () => {
     setErrors({
       name: !deatils.name,
       address: !deatils.address,
@@ -99,7 +130,7 @@ const Order = () => {
 
     // console.log(address);
 
-    dispatch(
+    const orders = await dispatch(
       order({
         products: cartItems,
         tax,
@@ -107,7 +138,73 @@ const Order = () => {
         total,
         address,
       }),
-    );
+    ).unwrap();
+    console.log("Order created:", orders); // Log the order details
+
+    const paymentData = await dispatch(
+      paymentProcess({
+        orderId: orders.order._id,
+      }),
+    ).unwrap();
+
+    console.log("Payment data received:", paymentData); // Log the payment data
+
+    const load = await loader();
+    if (!load) {
+      toast.error("Failed to load payment gateway");
+      return;
+    }
+
+    if (!paymentData?.keyId || !paymentData?.razorpayOrderId) {
+      toast.error("Payment configuration is missing. Please try again.");
+      return;
+    }
+
+    const option = {
+      key: paymentData.keyId,
+      amount: paymentData.amount,
+      currency: paymentData.currency,
+      name: "Ecom",
+      description: "Test Transaction",
+      order_id: paymentData.razorpayOrderId,
+      handler: async function (rzpResponse) {
+        try {
+          await axios.post(
+            `${import.meta.env.VITE_API_URL}/api/payment/payment/verify`,
+            {
+              razorpay_order_id: rzpResponse.razorpay_order_id,
+              razorpay_payment_id: rzpResponse.razorpay_payment_id,
+              razorpay_signature: rzpResponse.razorpay_signature,
+              orderId: orders.order._id,
+            },
+            { withCredentials: true },
+          );
+          toast.success("Payment successful");
+          localStorage.removeItem("cart");
+          navigate("/");
+        } catch (error) {
+          toast.error(
+            error.response?.data?.message || "Payment verification failed",
+          );
+        }
+      },
+      prefill: {
+        name: deatils.name,
+        contact: user?.phone || "",
+      },
+      theme: { color: "#1f56f5" },
+      modal: {
+        ondismiss: () => {
+          toast("Payment cancelled", "info");
+        },
+      },
+    };
+
+    const rzp = new window.Razorpay(option);
+    rzp.on("payment.failed", () => {
+      toast("Payment failed. Please try again.", "error");
+    });
+    rzp.open();
   };
 
   return (
@@ -121,8 +218,10 @@ const Order = () => {
                 No items added to cart
               </p>
             ) : (
-              cartItems.map((item, index) => {
-                return <CartItems item={item} key={index} order={true} />;
+              cartItems.map((item) => {
+                return (
+                  <CartItems item={item} key={item.product} order={true} />
+                );
               })
             )}
           </div>
@@ -250,15 +349,8 @@ const Order = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center gap-6">
-            <img
-              src="https://qrcode.tec-it.com/API/QRCode?data=QR+Code+Generator+by+TEC-IT"
-              alt="UPI QR"
-              className="h-50"
-            />
-            <p className="text-lg">Pay Now...</p>
-
             <button
-              className="w-3/4 px-4 py-2 bg-blue-500 rounded-lg text-white cursor-pointer"
+              className="w-full px-4 py-2 bg-blue-500 rounded-lg text-white cursor-pointer"
               onClick={handleOrder}
             >
               Order Now
